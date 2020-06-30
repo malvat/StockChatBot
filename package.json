@@ -1,0 +1,31 @@
+{
+  "name": "stockchatbot",
+  "version": "1.0.0",
+  "description": "a chat bot application made using ibm watson chat api ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malvat/StockChatBot.git"
+  },
+  "keywords": [
+    "ibm",
+    "watson",
+    "api",
+    "node",
+    "express",
+    "backend"
+  ],
+  "author": "anim malvat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/malvat/StockChatBot/issues"
+  },
+  "homepage": "https://github.com/malvat/StockChatBot#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
