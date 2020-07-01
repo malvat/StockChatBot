@@ -4,7 +4,12 @@ const router = express.Router();
 const watson = require('./watson');
 
 // Home request
-router.get('/', (req, res)=>res.send(`Server is running at http://localhost:${process.env.PORT}`));
+router.post('/input', (req, res)=> {
+    res.send({
+        "input": req.body.message,
+    })
+    console.log(req.body.message);
+});
 
 // send message
 router.post('/', watson.message);
