@@ -11,6 +11,8 @@ router.post('/input', (req, res)=> {
     console.log(req.body.message);
 });
 
+
+
 // send message
 router.post('/', watson.message);
 

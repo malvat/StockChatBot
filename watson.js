@@ -1,6 +1,7 @@
 require('dotenv').config();
 const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
+const stockInfo = require('stock-info');
 
 /**
  * create an instance of watson assistant
@@ -86,9 +87,21 @@ async function sendRequest(input, session_id){
         input: {
             'message_type': 'text',
             'text': input,
+            'options': {
+                'return_context': true,
+            },
+        },
+        context:{
+            skills: {
+                'main skill': {
+                    'user_defined': {
+                        'stock_price': "12",
+                    }
+                }
+            }
         },
     }).then(res => {
-        console.log(res.result.output.generic[0].text);
+        //console.log(res.result.context.skills);
         return res.result.output.generic[0].text;
     }).catch(err => {
         console.log("Error: could not receive any response from watson");
@@ -96,4 +109,12 @@ async function sendRequest(input, session_id){
     })
 }
 
+function getStockInfo(req, res) {
+    stockInfo.getSingleStockInfo("goog").then(result=>{
+        console.log(result);
+        res.send(result)
+    })
+}
+
 module.exports.message = message;
+module.exports.getStockInfo = getStockInfo;
