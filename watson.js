@@ -47,15 +47,19 @@ function message(req, res) {
             return session_id;
         })
     }
-
+    var stock_price = 1;
+    if(session.stock_price != undefined) {
+        stock_price = session.stock_price;
+    } 
     get_session_id.then(session_id=>{
-        sendRequest(input, session_id)
+        sendRequest(input, session_id, stock_price)
             .then(output=>{
+                req.session.stock_price = output.stock_price;
                 res.send({
                     "error": 0,
                     "errorText": "None",
                     "sessionId": session_id,
-                    "output": output,
+                    "output": output.text,
                 })
             })
     });
@@ -80,7 +84,7 @@ async function createSession() {
 /**
  * returns the response of watson
  */
-async function sendRequest(input, session_id){
+async function sendRequest(input, session_id, stock_price){
     return assistant.message({
         assistantId: process.env.WATSON_ASSISTANT_ID,
         sessionId: session_id,
@@ -95,18 +99,35 @@ async function sendRequest(input, session_id){
             skills: {
                 'main skill': {
                     'user_defined': {
-                        'stock_price': "12",
+                        'stock_price': stock_price,
                     }
                 }
             }
         },
-    }).then(res => {
+    }).then(async res => {
         //console.log(res.result.context.skills);
-        return res.result.output.generic[0].text;
+        var user_defined = res.result.context.skills["main skill"].user_defined;
+        let stock_price = 1;
+        if(user_defined != undefined) {
+            if(user_defined.stock_name != undefined) {
+                var stock_data = await getStockPrice(user_defined.stock_name);
+                stock_price = stock_data.regularMarketPrice;
+                console.log(stock_price);
+            }
+        }
+        var output = {"stock_price": stock_price};
+        output["text"] = res.result.output.generic[0].text;
+        return output;
     }).catch(err => {
-        console.log("Error: could not receive any response from watson");
+        console.log("Error: could not receive any response from watson", err);
         return -1;
     })
+}
+
+function getStockPrice(ticker) {
+    return stockInfo.getSingleStockInfo(ticker).then(result => {
+        return result;
+    });
 }
 
 function getStockInfo(req, res) {
