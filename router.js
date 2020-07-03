@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const watson = require('./watson');
 
-// Home request
+// input request for seding request messsage to watson
 router.post('/input', (req, res)=> {
     res.send({
         "input": req.body.message,
@@ -11,6 +11,13 @@ router.post('/input', (req, res)=> {
     console.log(req.body.message);
 });
 
+// Home request for testing if the api is working or not
+router.get("/", (req, res) => {
+    res.send({
+        "working": true,
+        "error": 0
+    })
+})
 
 
 // send message
