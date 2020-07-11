@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const watson = require('./watson');
+const user_controller = require('./controller/user_controller');
 
 // input request for seding request messsage to watson
 router.post('/input', (req, res)=> {
@@ -22,5 +23,11 @@ router.get("/", (req, res) => {
 
 // send message
 router.post('/', watson.message);
+
+
+// user methods
+router.post('/user/create', user_controller.create);
+router.post('/user/edit', user_controller.edit);
+router.post('/user/view', user_controller.view);
 
 module.exports = router;

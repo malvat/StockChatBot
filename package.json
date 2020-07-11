@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "ibm-watson": "^5.6.0",
+    "mongoose": "^5.9.22",
     "stock-info": "^1.2.0"
   }
 }
