@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
+const types = mongoose.Schema.Types
 
 const User = new mongoose.Schema({
-    first_name: String,
-    last_name: String, 
-    email: String,
-    password: String
+    first_name: types.String,
+    last_name: types.String, 
+    email: types.String,
+    password: types.String
 });
 
 

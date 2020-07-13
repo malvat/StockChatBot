@@ -1,4 +1,7 @@
+require('dotenv').config();
 const model = require('../model/user');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 /**
  * creates a user with given parameters
@@ -75,20 +78,30 @@ module.exports.edit = (req, res) => {
 }
 
 module.exports.view = (req, res)=>{
-    if(!req.body.email) {
+    if(!req.body.email || !req.body.password) {
         res.send({
             error: 1,
-            output: "provide email as parameter",
+            output: "provide proper credentials",
         })
     } else {
         model.User.findOne({
-            email: req.body.email
+            email: req.body.email,
+            password: req.body.password
         }).then(result => {
             if(result) {
+                var hashed_password = bcrypt.hashSync(req.body.password);
+                var token = jwt.sign({
+                    id: result._id,
+                    email: req.body.email,
+                    password: hashed_password,
+                }, process.env.AUTH_SECRET_KEY, {
+                    expiresIn: 86400,
+                });
                 res.send({
                     error: 0,
                     output: "result was found",
                     data: result,
+                    token: token,
                 })
             } else {
                 res.send({
