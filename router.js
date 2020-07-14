@@ -4,6 +4,7 @@ const router = express.Router();
 const watson = require('./watson');
 const user_controller = require('./controller/user_controller');
 const credit_controller = require('./controller/credit_controller');
+const stock_controller = require('./controller/stock_controller');
 const jwt = require('jsonwebtoken');
 
 // input request for seding request messsage to watson
@@ -55,6 +56,8 @@ router.post('/user/edit', auth, user_controller.edit);
 router.post('/user/view', user_controller.view);
 
 // stock methods
+router.post('/user/stock/add', stock_controller.add);
+router.post('/user/stock/sub', stock_controller.sub);
 
 // credit methods
 router.post('/user/credit/add', credit_controller.add);
